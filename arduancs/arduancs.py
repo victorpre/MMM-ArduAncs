@@ -1,13 +1,6 @@
 #!/usr/bin/python
 # coding: utf8
 
-# ====================================================
-# MMM-ArduPort Copyright(C) 2019 Furkan Türkal
-# // This program comes with ABSOLUTELY NO WARRANTY; This is free software,
-# and you are welcome to redistribute it under certain conditions; See
-# file LICENSE, which is part of this source code package, for details.
-# ====================================================
-
 import os
 import sys
 import time
@@ -17,13 +10,14 @@ import threading
 import datetime
 import glob
 import serial
+import sys
 
 import arduino
 
 
-def to_node(type, message):
+def to_node(message):
     try:
-        print(json.dumps({type: message}))
+        print(json.dumps(message))
     except Exception:
         pass
 
@@ -54,6 +48,9 @@ def get_serial_ports():
 def start_scanner():
     con_list = {}
 
+    config = json.loads(sys.argv[1])
+    main_port = config['portname']
+
     while True:
         # Scan all ports
         ports = get_serial_ports()
@@ -71,11 +68,11 @@ def start_scanner():
                     con_list[current] = False
 
                 # Arduino is connected
-                if current in con_list and con_list[current] == False:
+                if current == main_port and current in con_list and con_list[current] == False:
                     con = arduino.Arduino(current, 9600)
                     if con.open(max_attempt = 5):
                         con_list[current] = True
-                        to_node("status", {"name": "connect", "data": "connected"})
+                        to_node({"type": "setup", "content": {"status": "connected"}})
 
                         thread = threading.Thread(target = con.start_serial())
                         thread.start()
@@ -91,13 +88,13 @@ def start_scanner():
             for con in con_list:
                 if con_list[con] == True:
                     con_list[con] = False
-                    to_node("status", {"name": "connect", "data": "disconnected"})
+                    to_node({"type": "status", "content": {"status": "disconnected"}})
 
         time.sleep(1)
 
 if __name__ == '__main__':
-    to_node("debug", 'SerialPort shell started...')
-    to_node("debug", 'Waiting Ardunio to connect on port...')
+    to_node({"type": "debug", "content": {"status": "SerialPort shell started..."}})
+    to_node({"type": "debug", "content": {"status": "Waiting Ardunio to connect on port..."}})
 
     scanner = threading.Thread(target = start_scanner)
     scanner.start()

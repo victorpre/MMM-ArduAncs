@@ -1,8 +1,8 @@
 {
-    "name": "mmmarduport",
+    "name": "mmmarduancs",
     "version": "1.0.0",
-    "description": "MagicMirror Module for serial communicating with Arduino",
-    "main": "MMM-ArduPort.js",
+    "description": "MagicMirror Module for serial communicating with Arduino ANCS",
+    "main": "MMM-ArduAncs.js",
     "repository": {
         "type": "git"
     },
@@ -10,9 +10,12 @@
         "MagicMirror",
         "Module",
         "Arduino",
-        "SerialPort"
+        "SerialPort",
+        "ANCs",
+        "BLE"
     ],
-    "author": "Furkan Türkal",
+    "author": "Victor Presumido",
+    "contributors": ["Furkan Türkal"],
     "license": "MIT",
     "dependencies": {
         "python-shell": "latest"

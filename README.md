@@ -1,23 +1,22 @@
-# MMM-ArduPort
+# MMM-ArduAncs
 This is a module for the [MagicMirror²](https://github.com/MichMich/MagicMirror/tree/develop) smart mirror project.
 
-This module provides Arduino serial communication support with Raspberry PI.
+This module provides Arduino serial communication support with Raspberry PI for [ANCs](https://developer.apple.com/library/archive/documentation/CoreBluetooth/Reference/AppleNotificationCenterServiceSpecification/Specification/Specification.html) usage.
 
-I created this module for my project real-time [ArduRMMMQ](https://github.com/Dentrax/ArduRMMMQ) project.
 
 | Status  | Version | Date       | Maintained? | Minimum MagicMirror² Version |
 |:------- |:------- |:---------- |:----------- |:---------------------------- |
-| Working | `1.0.0` | 2019-01-11 | Yes         |`2.0.0`                       |
+| Working | `1.0.0` | 2024-04-17 | Yes         |`2.0.0`                       |
 
 ## Screenshots
 
-![MMM-ArduPort Running](screenshots/mmmarduport_running.png?raw=true "Screenshot")
+![MMM-ArduAncs Running](screenshots/mmmarduport_running.png?raw=true "Screenshot")
 
-![MMM-ArduPort Running](screenshots/mmmarduport_waiting-module.png?raw=true "Screenshot")
+![MMM-ArduAncs Running](screenshots/mmmarduport_waiting-module.png?raw=true "Screenshot")
 
-![MMM-ArduPort Running](screenshots/mmmarduport_waiting-arduino.png?raw=true "Screenshot")
+![MMM-ArduAncs Running](screenshots/mmmarduport_waiting-arduino.png?raw=true "Screenshot")
 
-![MMM-ArduPort Running](screenshots/mmmarduport_starting.png?raw=true "Screenshot")
+![MMM-ArduAncs Running](screenshots/mmmarduport_starting.png?raw=true "Screenshot")
 
 ## Dependencies
 
@@ -29,14 +28,14 @@ I created this module for my project real-time [ArduRMMMQ](https://github.com/De
 
 To install the module, use your terminal to:
 
-1. Navigate to your MagicMirror's `modules` folder. If you are using the default installation directory, use the command: 
+1. Navigate to your MagicMirror's `modules` folder. If you are using the default installation directory, use the command:
 ```
 cd ~/MagicMirror/modules
 ```
 
 2. Clone the module to your computer by executing the following command:
 ```
-git clone https://github.com/Dentrax/MMM-ArduPort.git
+git clone https://github.com/victorpre/MMM-ArduAncs.git
 ```
 
 3. Install the `python-shell` library by executing the following command:
@@ -56,9 +55,9 @@ var config = {
     modules: [
         ...
         {
-            module: "MMM-ArduPort",
+            module: "MMM-ArduAncs",
             position: "bottom_right",
-            header: "MMM-ArduPort",
+            header: "MMM-ArduAncs",
             config: {
                 // See below for more Configuration Options
             }
@@ -116,110 +115,18 @@ var config = {
       <td><code>true</code></td>
     </tr>
     <tr>
-      <td><code>sensors</code></td>
-      <td><strong>REQUIRED</strong><br>Sensor array to be used in the module<br><br></td>
+      <td><code>appsWhitelist</code></td>
+      <td><strong>REQUIRED</strong><br>Array of apps which you want to receive notification<br><br><strong>NOTE:</strong> Leave it empty to receive all notifications</td>
       <td>array</td>
       <td><code>NULL</code></td>
     </tr>
-  </tbody>
-</table>
+    <tr>
+      <td><code>latestNotifications</code></td>
+      <td><strong>REQUIRED</strong><br>Array where the latest notifications will be stored<br><br></td>
+      <td>array</td>
+      <td><code>NULL</code></td>
+    </tr>
 
-Each object in the `sensors` array can have the following parameters:
-
-<table>
-  <thead>
-    <tr>
-      <th>Option</th>
-      <th>Description</th>
-      <th>Values</th>
-      <th>Default</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>name</code></td>
-      <td><strong>REQUIRED</strong><br>The name of the sensor (case-sensitive, no space)<br><br><strong>Example:</strong> <code>"HCSR04"</code></td>
-      <td>string</td>
-      <td><code>NULL</code></td>
-    </tr>
-    <tr>
-      <td><code>description</code></td>
-      <td>If <code>showDescription</code> = <code>true</code> description shown under the sensor<br><br><strong>Example:</strong> <code>"My awesome description"</code></td>
-      <td>string</td>
-      <td><code>NULL</code></td>
-    </tr>
-    <tr>
-      <td><code>maxValue</code></td>
-      <td>MAXIMUM value that the sensor can produce<br><br></td>
-      <td>integer</td>
-      <td><code>NULL</code></td>
-    </tr>
-    <tr>
-      <td><code>maxFormat</code></td>
-      <td>To format the string shown on the screen<br><br><strong>Example:</strong> <code>({0}) MAX</code></td>
-      <td>string</td>
-      <td><code>NULL</code></td>
-    </tr>
-    <tr>
-      <td><code>highestValue</code></td>
-      <td>HIGHEST value that the sensor can produce<br><br></td>
-      <td>integer</td>
-      <td><code>NULL</code></td>
-    </tr>
-    <tr>
-      <td><code>highestFormat</code></td>
-      <td>To format the string shown on the screen<br><br><strong>Example:</strong> <code>({0}) HIGHEST</code></td>
-      <td>string</td>
-      <td><code>NULL</code></td>
-    </tr>
-    <tr>
-      <td><code>highValue</code></td>
-      <td>HIGH value that the sensor can produce<br><br></td>
-      <td>integer</td>
-      <td><code>NULL</code></td>
-    </tr>
-    <tr>
-      <td><code>highFormat</code></td>
-      <td>To format the string shown on the screen<br><br><strong>Example:</strong> <code>({0}) HIGH</code></td>
-      <td>string</td>
-      <td><code>NULL</code></td>
-    </tr>
-    <tr>
-      <td><code>lowValue</code></td>
-      <td>LOW value that the sensor can produce<br><br></td>
-      <td>integer</td>
-      <td><code>NULL</code></td>
-    </tr>
-    <tr>
-      <td><code>lowFormat</code></td>
-      <td>To format the string shown on the screen<br><br><strong>Example:</strong> <code>({0}) LOW</code></td>
-      <td>string</td>
-      <td><code>NULL</code></td>
-    </tr>
-    <tr>
-      <td><code>lowestValue</code></td>
-      <td>LOWEST value that the sensor can produce<br><br></td>
-      <td>integer</td>
-      <td><code>NULL</code></td>
-    </tr>
-    <tr>
-      <td><code>lowestFormat</code></td>
-      <td>To format the string shown on the screen<br><br><strong>Example:</strong> <code>({0}) LOWEST</code></td>
-      <td>string</td>
-      <td><code>NULL</code></td>
-    </tr>
-    <tr>
-      <td><code>minValue</code></td>
-      <td>MINIMUM value that the sensor can produce<br><br></td>
-      <td>integer</td>
-      <td><code>NULL</code></td>
-    </tr>
-    <tr>
-      <td><code>minFormat</code></td>
-      <td>To format the string shown on the screen<br><br><strong>Example:</strong> <code>({0}) MIN</code></td>
-      <td>string</td>
-      <td><code>NULL</code></td>
-    </tr>
   </tbody>
 </table>
 
@@ -228,68 +135,20 @@ Here is an example of an entry in `config.js` with full-feature.
 ```
 ...
         {
-	          module: 'MMM-ArduPort',
+	          module: 'MMM-ArduAncs',
 	          position: 'bottom_left',
               header: 'Arduino Sensors',
               config: {
-                portname: "/dev/ttyUSB0",
-                updateInterval: 1,
-                animationSpeed: 1000,
+                portname: "/dev/tty.usbmodem21203",
+                updateInterval: 1, //second
+		            animationSpeed: 1000,
                 displayIcons: true,
-                showDescription: true,
-                hideLoading: false,
-                hideWaiting: false,
-                useColors: true,
-                sensors: [
-                    {
-                        name: "MQ2",
-                        description: "LPG, Propane, Hydrogen",
-                        maxValue: 50,
-                        maxFormat: "({0} ppm) MAXIMUM",
-                        highestValue: 30,
-                        highestFormat: "({0} ppm) CRITICAL",
-                        highValue: 15,
-                        highFormat: "({0} ppm) EMERGENCY",
-                        lowValue: 10,
-                        lowFormat: "({0} ppm) LOW",
-                        lowestValue: 5,
-                        lowestFormat: "({0} ppm) VERY LOW",
-                        minValue: 0,
-                        minFormat: "({0} ppm) OK"
-                    },
-                    {
-                        name: "LM35",
-                        description: "Temperature",
-                        maxValue: 50,
-                        maxFormat: "({0}°C) VERY HIGH",
-                        highestValue: 30,
-                        highestFormat: "({0}°C) HIGH",
-                        highValue: 15,
-                        highFormat: "({0}°C) NORMAL",
-                        lowValue: 10,
-                        lowFormat: "({0}°C) LOW",
-                        lowestValue: 5,
-                        lowestFormat: "({0}°C) VERY LOW",
-                        minValue: 0,
-                        minFormat: "({0}°C) OK"
-                    },
-                    {
-                        name: "HCSR04",
-                        description: "Distance",
-                        maxValue: 50,
-                        maxFormat: "({0} cm) TOO FAR",
-                        highestValue: 30,
-                        highestFormat: "({0} cm) FAR",
-                        highValue: 15,
-                        highFormat: "({0} cm) NORMAL",
-                        lowValue: 10,
-                        lowFormat: "({0} cm) CLOSE",
-                        lowestValue: 5,
-                        lowestFormat: "({0} cm) TOO CLOSE",
-                        minValue: 0,
-                        minFormat: "({0} cm) OK"
-                    },
-                ]
+	              iconSize: 'small',
+		            labelSize: 'medium',
+                showDescription: false,
+		            appsWhitelist: [],
+		            latestNotifications: [],
+                developerMode: false
             }
         },
 ...
@@ -297,11 +156,35 @@ Here is an example of an entry in `config.js` with full-feature.
 
 ## Using the Arduino
 
-To communicate between `Arduino` and `MMM-ArduPort`, serial communication must be in this format:
+To communicate between `Arduino` and `MMM-ArduAncs`, serial communication must be in this format:
 
 ```
-Serial.println("[COMMAND:NAME:DATA]")
+
+{
+        "type": "notification",
+        "content": {
+            "id": 1, // integer
+            "category" : "string",
+            "app_id": "string",
+            "message": "string",
+            "title": "string",
+            "subtitle": "string",
+            "removed": true // bolean
+        }
+}
 ```
+
+OR
+
+```
+{
+        "type": "setup",
+        "content": {
+            "status": "starting" // "waiting", "connected", "disconnected"
+        }
+}
+```
+
 
 ### Starting the module
 
@@ -309,106 +192,23 @@ Serial.println("[COMMAND:NAME:DATA]")
 
 In order to start the module, the Arduino's `setup()` function must be completed.
 
-- To send `starting` signal: `[status:setup:starting]`
+- To send `starting` signal: `{"type": "setup", "content": { "status": "starting" } }`
 
-- To send `started` signal: `[status:setup:started]`
+- To send `connected` signal: `{"type": "setup", "content": { "status": "connected" } }`
 
-- To send `failed` signal: `[status:setup:failed]**
+- To send `failed` signal: `{"type": "setup", "content": { "status": "failed" } }`
 
-**Example:**
-
-```
-Serial.println("[status:setup:starting]");
-Serial.println("[status:setup:failed]");
-Serial.println("[status:setup:started]");
-```
 
 ### Sending data to module
 
-**IMPORTANT:** The signal command you send must be registered as name in the `sensors*** array.
+**IMPORTANT:** If you don't want to shown notification from a specific application, do not add the `app_id` to the `appsWhitelist` array.
 
-**Example**
-```
-                sensors: [
-                    {
-                        name: "MQ2",
-                    },
-                    {
-                        name: "LM35",
-                    },
-                    {
-                        name: "HCSR04",
-                    },
-```
 
-To transmit a sensor data to the module: `[sensor:SENSOR_NAME:SENSOR_VALUE]**
+### Full CircuitPython Example
 
-**Example:**
-
-```
-Serial.println("[sensor:MQ2:19]");
-Serial.println("[sensor:LM35:11]");
-Serial.println("[sensor:HCSR04:64]");
-```
-
-### Full Arduino Example
-
-```
-volatile int32_t m_counter = 0;
-bool WasStarted = false;
-
-static const char *pcMQ2Prefix = "[sensor:MQ2:";
-static const char *pcLM35Prefix = "[sensor:LM35:";
-static const char *pcHCSR04Prefix = "[sensor:HCSR04:";
-static const char *pcPostfix = "]";
-
-void setup() {
-  Serial.begin(9600);
-  while(!Serial);
-  
-  Serial.println("[status:setup:starting]");
-  
-  int test = 1;
-  m_counter = test;
-
-  if(test > 1) {
-    WasStarted = false;
-    Serial.println("[status:setup:failed]");
-    return;
-  }
-  
-  delay(3000);
-  WasStarted = true;
-  Serial.println("[status:setup:started]");
-  delay(100);
-}
-
-void loop() {
-  Serial.print(pcMQ2Prefix);
-  Serial.print(m_counter);
-  Serial.println(pcPostfix);
-
-  if(m_counter % 3 == 0) {
-    delay(1000);
-    Serial.print(pcLM35Prefix);
-    Serial.print(m_counter + 11);
-    Serial.println(pcPostfix);
-    delay(2000);
-    Serial.print(pcHCSR04Prefix);
-    Serial.print(m_counter + 33);
-    Serial.println(pcPostfix);
-  }
-
-  if(m_counter >= 60) m_counter = 0;
-  m_counter++;
-
-  delay(1000);
-}
-```
+Can be found in this [repository](https://github.com/victorpre/ancs-py/blob/a79024eaea0f064261d4787d60a022c32f099893/code.py#L57)
 
 ## Known Issues
-
-**Do not use `Serial.print()` instead of `Serial.println()` (Not supported yet)**
 
 - ISSUE: When the Arduino's reset button is pressed, sometimes the connection is terminated.
 - FIX:
@@ -423,23 +223,5 @@ void loop() {
 
 - [Michael Teeuw](https://github.com/MichMich) for creating the awesome [MagicMirror²](https://github.com/MichMich/MagicMirror/tree/develop) project that made this module possible.
 - [Jeff Clarke](https://github.com/jclarke0000/MMM-MyCommute) for creating awesome module design (that i use in this project) and inspires me to do this module.
+- [Furkan 'Dentrax' Türkal](https://github.com/Dentrax) for creating the initial module which was the foundation and basis for this project, the whole infrastructure, CSS, Python <-> JS communication was done by him.
 
-## License
-
-### The MIT License (MIT)
-
-Copyright © 2018 Furkan 'Dentrax' Türkal
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the “Software”), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-**The software is provided “as is”, without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose and noninfringement. In no event shall the authors or copyright holders be liable for any claim, damages or other liability, whether in an action of contract, tort or otherwise, arising from, out of or in connection with the software or the use or other dealings in the software.**

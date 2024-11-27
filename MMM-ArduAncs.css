@@ -1,0 +1,99 @@
+.MMM-ArduAncs .x-small	{ font-size: 15px; line-height: 20px; }
+.MMM-ArduAncs .small	{ font-size: 20px; line-height: 25px; }
+.MMM-ArduAncs .medium	{ font-size: 30px; line-height: 35px; }
+.MMM-ArduAncs .large	{ font-size: 65px; line-height: 65px; }
+.MMM-ArduAncs .x-large	{ font-size: 75px; line-height: 75px; letter-spacing: -3px; }
+
+.MMM-ArduAncs .row {
+    position: relative;
+    padding: 1px;
+    border-bottom: solid 1px #222;
+    min-height: 35px;
+    /*min-width: 300px;*/
+}
+
+.MMM-ArduAncs .notif-rows {
+    height: 150px;
+    max-width: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.MMM-ArduAncs .notif-title {
+    display: block;
+    margin-right: 90px;
+    font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 25px;
+    margin-top: 4px;
+    margin-bottom: 6px;
+    text-align: left;
+}
+
+.MMM-ArduAncs .loading {
+	  color: #666666;
+}
+
+.MMM-ArduAncs .notif-msg {
+    font-size: 16px;
+    font-weight: 400;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 18px;
+    margin-bottom: 6px;
+    /*text-transform: uppercase;*/
+    text-align: left;
+}
+
+.MMM-ArduAncs .app-name,
+.MMM-ArduAncs .port-loading,
+.MMM-ArduAncs .port-error {
+    text-align: right;
+    font-size: 16px;
+    font-weight: 400;
+    display: block;
+    white-space: nowrap;
+    position: absolute;
+    top: 6px;
+    right: 0px;
+    line-height: 18px;
+    margin-top: 4px;
+}
+
+.MMM-ArduAncs .sensor-error {
+    color: #be0e0e;
+}
+
+.MMM-ArduAncs .app-name.value-waiting {
+    color: #7f7f7f;
+}
+
+.MMM-ArduAncs .app-name.value-starting {
+    color: #7f7f7f;
+}
+
+.MMM-ArduAncs .app-name.value-max {
+    color: #ff0019;
+}
+.MMM-ArduAncs .app-name.value-highest {
+    color: #ff5a44;
+}
+.MMM-ArduAncs .app-name.value-high {
+    color: #e8ff19;
+}
+.MMM-ArduAncs .app-name.value-normal {
+    color: #f8dd70;
+}
+.MMM-ArduAncs .app-name.value-low {
+    color: #a3ea80;
+}
+.MMM-ArduAncs .app-name.value-lowest {
+    color: #00ff19;
+}
+.MMM-ArduAncs .app-name.value-min {
+    color: #ffffff;
+}
