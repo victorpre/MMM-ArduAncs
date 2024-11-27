@@ -1,5 +1,5 @@
 // ====================================================
-// MMM-ArduPort Copyright(C) 2019 Furkan Türkal
+// MMM-arduancs Copyright(C) 2019 Furkan Türkal
 // This program comes with ABSOLUTELY NO WARRANTY; This is free software,
 // and you are welcome to redistribute it under certain conditions; See
 // file LICENSE, which is part of this source code package, for details.
@@ -15,7 +15,7 @@ var pythonStarted = false;
 
 module.exports = NodeHelper.create({
 
-    consolePrefix: '[MMM-ArduPort]:: ',
+    consolePrefix: '[MMM-ArduAncs]:: ',
 
     start: function() {
         console.log(this.consolePrefix + "Starting node_helper for module [" + this.name + "]");
@@ -24,19 +24,17 @@ module.exports = NodeHelper.create({
 
     python_start: function () {
         const self = this;
-        const pyshell = new PythonShell('modules/' + this.name + '/arduport/arduport.py', { mode: 'json', args: [JSON.stringify(this.config)]});
-
+        const pyshell = new PythonShell('modules/' + this.name + '/arduancs/arduancs.py', { mode: 'json', args: [JSON.stringify(this.config)]});
 
         pyshell.on('message', function (message) {
-            console.log(message);
-            if (message.hasOwnProperty('debug')){
-                console.log(this.consolePrefix + "[" + self.name + "] " + message.debug);
+
+            if (message.type == 'debug'){
+                console.log(this.consolePrefix + "[" + self.name + "] " + message.content.status);
             }
-            if (message.hasOwnProperty('status')){
-                console.log(message.status);
-                self.sendSocketNotification('status', {action: "status", name: message.status.name, data: message.status.data});
-            }
-            if (message.hasOwnProperty('sensor')){
+			if (message.type == 'status'){
+                self.sendSocketNotification('status', message);
+			}
+            if (message.type == 'notification'){
                 if(self.initialized){
                     self.sendData(message);
                 }
@@ -51,18 +49,10 @@ module.exports = NodeHelper.create({
 
     sendData: function(message){
 		    const self = this;
-        var value;
-        for(var i in this.config.sensors){
-            value = null;
-            var sensor = this.config.sensors.find(x => x.name === message.sensor.name);
-            if(sensor){
-                value = message.sensor.data;
-            } else {
-                console.error(self.consolePrefix + 'Error: Incoming Sensor ' + this.config.sensors[i].name + ' not configured in config.js!');
-            }
-            sensor.value = value;
-        }
-        self.sendSocketNotification('sensor', this.config.sensors);
+
+			if (this.config.appsWhitelist.length === 0 || this.config.appsWhitelist.find(x => x === message.app_id)) {
+				self.sendSocketNotification('ble_notification', message);
+			}
     },
 
     socketNotificationReceived: function(notification, payload) {
@@ -72,7 +62,7 @@ module.exports = NodeHelper.create({
 			      this.config = payload;
 		    } else if (notification === "INITIALIZE" && this.config !== null){
             this.python_start();
-            self.sendSocketNotification('status', {action: "status", name: "initialized"});
+			self.sendSocketNotification('status', {"type": "setup", "content": {"status": "initialized"}})
             this.initialized = true;
 		    }
     }
